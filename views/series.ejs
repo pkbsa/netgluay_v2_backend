@@ -1,0 +1,86 @@
+<html lang="en">
+  <head>
+    <title>Movie | NetGluay.com</title>
+    <link rel="icon" href="https://i.imgur.com/iPZltqj.png" type="image/png" />
+    <link rel="stylesheet" href="movie.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="navLeft">
+          <a id='logo' href='/'><img src="https://i.imgur.com/jcpK4JC.png" alt="logo"></a>
+          <a href="/">HOME</a>
+          <a href="/movie">MOVIES</a>
+          <a href="/series">SERIES</a>
+      </div>
+      <div class="navRight">
+          <form method="GET" action="/result">
+              <input class="submit_on_enter" type="text" name="search" id="search">
+          </form>
+          <a href="#" id="noti"><img src="https://i.imgur.com/PQWFgxD.png" alt="notifybell"></a>
+          <div class="dropdown" style="float:right;">
+              <button id="pfp" class="dropbtn"><img src="https://i.imgur.com/9S77aYT.jpg"
+                      alt="profilepicture"></button>
+              <div class="dropdown-content" style="right:0">
+                  <a href="#">Profile</a>
+                  <a href="#">About Us</a>
+                  <a href="/logout">Logout</a>
+              </div>
+          </div>
+      </div>
+  </nav>
+
+    <div class="mainContainer">
+      <div class="title">
+        <div class="titleLeft">
+          <h1>Series</h1>
+          <form>
+            <select class="event-type-select">
+              <option value="all">All Genre Types</option>
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Animation">Animation</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime">Crime</option>
+              <option value="Drama">Drama</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="History">History</option>
+              <option value="Horror">Horror</option>
+              <option value="Mystery">Mystery</option>
+            </select>
+          </form>
+        </div>
+        <div class="titleRight">
+          <button id="date" >Sort by Date</button>
+          <button>Alphabetically</button>
+        </div>
+      </div>
+      <div class="container">
+        <% for(var m of movies) { %>
+          <div class="genre <%= m.genre %>">
+            <a href="/ng/<%=m.imdb%>">
+              <img src="<%= m.posterImage%>" loading="lazy" alt="poster" />
+              <div class="detail">
+                <p><%= m.name %></p>
+                <p class="year"><%= m.year %></p>
+              </div>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script>
+    $(".event-type-select").change(function () {
+      var selectedEventType = this.options[this.selectedIndex].value;
+      if (selectedEventType == "all") {
+        $(".container div").removeClass("hidden");
+      } else {
+        $(".container div").addClass("hidden");
+        const genre = $("." + selectedEventType);
+        genre.removeClass("hidden");
+      }
+    });
+  </script>
+</html>

@@ -1,0 +1,55 @@
+<html lang="en">
+    <head>
+        <title>Login | NetGluay.com</title>
+        <link rel="icon" href="https://i.imgur.com/iPZltqj.png" type="image/png">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="login.css">
+    </head>
+    <body>
+        <nav>
+            <div class="navLeft">
+                <a id='logo' href='/'><img src="https://i.imgur.com/jcpK4JC.png" alt="logo"></a>
+            </div>
+        </nav>
+        <div class="mainContainer">
+            <h1>Log In</h1>
+            <p>Don't have an account? <a href="/register">Sign Up</a></p>
+            <form action="auth_login" method="post">
+                <label>Username</label><br>
+                <% if (message == '') { %>
+                <input type="text" name="email" value="<%=message%>"><br>
+                <% } else if (message == 'user' || message == "userpassword" || message == "userblank") { %>
+                    <div class="form-group has-danger">
+                        <input type="text" class="form-control is-invalid" id="inputInvalid" value="<%=user%>" name="email">
+                        <% if (message == 'user') { %>
+                            <div class="invalid-feedback">Users Doesn't Exist</div>
+                        <% } else { %>
+                            <div class="invalid-feedback">The Box is Empty</div>
+                        <% } %>
+                    </div>
+                
+                <% } else { %>
+                    <input type="text" name="email" value=<%=user%>><br>
+                <%}%>
+                <label >Password</label><br>
+                <% if (message == '') { %>
+                <input type="password" name="password"><br>
+                <% } else if (message == 'password' || message == "userpassword" || message == "passwordblank") { %>
+                    <div class="form-group has-danger">
+                        <input type="password" class="form-control is-invalid" id="inputInvalid" name="password">
+                        <% if (message == 'password') { %>
+                            <div class="invalid-feedback">Password Incorrect</div>
+                        <% } else { %>
+                            <div class="invalid-feedback">The Box is Empty</div>
+                        <% } %>
+                    </div>
+                    <% } else { %>
+                        <input type="password" name="password"><br>
+                <%}%>
+                <button type="submit">Log In</button>
+            </form>
+            <p id="term">* By Logging in, you agree to our Terms of Use and to receive<br>
+            Our emails & updates and acknowledge that you read our Privacy Policy.</p>
+        </div>
+    </body>
+</html>

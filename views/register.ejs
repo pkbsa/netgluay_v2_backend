@@ -1,0 +1,60 @@
+<html lang="en">
+    <head>
+        <title>Register | NetGluay.com</title>
+        <link rel="icon" href="https://i.imgur.com/iPZltqj.png" type="image/png">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="login.css">
+    </head>
+    <body>
+        <nav>
+            <div class="navLeft">
+                <a id='logo' href='/'><img src="https://i.imgur.com/jcpK4JC.png" alt="logo"></a>
+            </div>
+        </nav>
+        <div class="mainContainer">
+            <h1>Sign Up</h1>
+            <p>Already have an account? <a href="/login">Log in</a></p>
+            <form action="auth_register" method="post">
+                <label for="username">Username</label><br>
+                <% if (message == 'username') { %>
+                    <div class="form-group has-danger">
+                        <input type="text" value="<%=user%>" class="form-control is-invalid" id="inputInvalid" name="username" required>
+                        <div class="invalid-feedback">The username is already taken</div>
+                    </div>
+                <% } else { %>
+                    <input  type="text" value="<%=user%>" name="username" required><br>
+                <% } %>
+                <label for="email">Email</label><br>
+                <% if (message == 'email') { %>
+                    <div class="form-group has-danger">
+                        <input type="email" value="<%=email%>" class="form-control is-invalid" id="inputInvalid" name="email" required>
+                        <div class="invalid-feedback">The email is already taken</div>
+                    </div>
+                <% } else { %>
+                    <input type="email" value="<%=email%>" name="email" required><br>
+                <% } %>
+
+                <label for="password">Password</label><br>
+                <% if (message == 'password') { %>
+                    <div class="form-group has-danger">
+                        <input type="text" class="form-control is-invalid" id="inputInvalid" name="password" required>
+                        <div class="invalid-feedback">Password do not match</div>
+                    </div>
+                    <label for="cfpassword">Type your password again</label><br>
+                    <div class="form-group has-danger">
+                        <input type="text" class="form-control is-invalid" id="inputInvalid" name="cfpassword" required>
+                        <div class="invalid-feedback">TPassword do not match</div>
+                    </div>
+                <% } else { %>
+                    <input type="password" name="password" required><br>
+                    <label for="cfpassword">Type your password again</label><br>
+                    <input type="password" name="cfpassword" required><br>
+                <% } %>
+                
+                <button type="submit">Sign up</button>
+            </form>
+            <p id="term">* By signing up, you agree to our Terms of Use and to receive<br>
+            Our emails & updates and acknowledge that you read our Privacy Policy.</p>
+        </div>
+    </body>
+</html>

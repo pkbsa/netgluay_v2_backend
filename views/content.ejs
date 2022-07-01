@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% for (var m of movies) { %>
+          <title><%=m.name%> | NetGluay.com</title>
+        <% } %>
+        <link rel="icon" href="https://i.imgur.com/iPZltqj.png" type="image/png" />
+        <link rel="stylesheet" href="../content.css" />
+    </head>
+
+    <body>
+      <nav>
+        <div class="navLeft">
+            <a id='logo' href='/'><img src="https://i.imgur.com/jcpK4JC.png" alt="logo"></a>
+            <a href="/">HOME</a>
+            <a href="/movie">MOVIES</a>
+            <a href="/series">SERIES</a>
+        </div>
+        <div class="navRight">
+            <form method="GET" action="/result">
+                <input class="submit_on_enter" type="text" name="search" id="search">
+            </form>
+            <a href="#" id="noti"><img src="https://i.imgur.com/PQWFgxD.png" alt="notifybell"></a>
+            <div class="dropdown" style="float:right;">
+                <button id="pfp" class="dropbtn"><img src="https://i.imgur.com/9S77aYT.jpg"
+                        alt="profilepicture"></button>
+                <div class="dropdown-content" style="right:0">
+                    <a href="#">Profile</a>
+                    <a href="#">About Us</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+          <% for (var m of movies) { %>
+          <div class="mainContainer">
+            <iframe width="1280" height="720" src="https://www.youtube.com/embed/<%=m.youtube%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="description">
+                <div class="left">
+            
+                </div>
+                <div class="right">
+           
+                </div>
+            </div>
+            
+        </div>
+        <% } %>
+        <script>
+          leftElem = document.querySelector(".left");
+          rightElem = document.querySelector(".right")
+
+          const options = {
+            method: 'GET',
+            headers: {
+              'X-RapidAPI-Host': 'movie-database-alternative.p.rapidapi.com',
+              'X-RapidAPI-Key': 'b4d041fd73mshbbdd415ae5ff3b8p119786jsn1c0d3093630d'
+            }
+          };
+
+          const url = 'https://movie-database-alternative.p.rapidapi.com/?r=json&i=<%=m.imdb%>';
+
+
+          fetch(url, options)
+          .then(response => response.json())
+          .then(response => {
+            leftElem.innerHTML += `<h1>${response.Title}<a href="https://www.imdb.com/title/<%=m.imdb%>/"><img src="https://imgur.com/uO56X8f.png"> ${response.imdbRating}</a></h1>`
+            leftElem.innerHTML += `<p>${response.Year} • ${response.Rated} • Duration : ${response.Runtime}</p>`
+            leftElem.innerHTML += `<p id="genre">${response.Genre}</p>`
+
+            rightElem.innerHTML += `<h2>Director: ${response.Director}</h2>`
+            rightElem.innerHTML += `<h2>Writer: ${response.Writer}</h2>`
+            rightElem.innerHTML += `<h2>Actor:  ${response.Actors}</h2>`
+          })
+          .catch(err => console.error('error:' + err));
+        </script>
+    </body>
+</html>

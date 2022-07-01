@@ -1,0 +1,120 @@
+<html lang="en">
+
+<head>
+    <title>Home | NetGluay.com</title>
+    <link rel="icon" href="https://i.imgur.com/iPZltqj.png" type="image/png">
+    <link rel="stylesheet" href="homePage.css">
+</head>
+
+<body>
+    <nav>
+        <div class="navLeft">
+            <a id='logo' href='/'><img src="https://i.imgur.com/jcpK4JC.png" alt="logo"></a>
+            <a href="/">HOME</a>
+            <a href="/movie">MOVIES</a>
+            <a href="/series">SERIES</a>
+        </div>
+        <div class="navRight">
+            <form method="GET" action="/result">
+                <input class="submit_on_enter" type="text" name="search" id="search">
+            </form>
+            <a href="#" id="noti"><img src="https://i.imgur.com/PQWFgxD.png" alt="notifybell"></a>
+            <div class="dropdown" style="float:right;">
+                <button id="pfp" class="dropbtn"><img src="<%=img%>"
+                        alt="profilepicture"></button>
+                <div class="dropdown-content" style="right:0">
+                    <a href="#">Profile</a>
+                    <a href="#">About Us</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="mainContainer">
+        <div class="content">
+            <h3>Duration: 1h 47m</h3>
+            <div class="contentFlex">
+                <img src="https://imgur.com/uO56X8f.png">
+                <p>6.5</p>
+                <p id="genre">Action | Adventure</p>
+            </div>
+            <h1>Rampage</h1>
+            <p>When three different animals become infected with a dangerous pathogen, a<br>
+                primatologist and a geneticist team up to stop them from destroying Chicago. </p>
+            <div class="contentFlex">
+                <button onclick="location.href='/ng/tt2231461'">WATCH</button>
+                <a href="https://www.imdb.com/title/tt2231461/"><button id="addList">RATING</button></a>
+            </div>
+        </div>
+    </div>
+    <div class="movieBox">
+        <div class="second">
+            <h1>Trends Now</h1>
+            <div class="wrapper">
+
+                <section id="section1">
+                    <a href="#section2" class="arrow__btn left-arrow">‹</a>
+                    <% for(var m of movies) { %>
+                        <% if (m.homepage==1) { %>
+                            <div class="item">
+                                <a href="/ng/<%=m.imdb%>">
+                                    <img src="<%= m.homeImage %>" loading="lazy" alt="Image">
+                                </a>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <a href="#section2" class="arrow__btn right-arrow">›</a>
+                </section>
+
+                <section id="section2">
+                    <a href="#section1" class="arrow__btn left-arrow">‹</a>
+                    <% for(var m of movies) { %>
+                        <% if (m.homepage==2) { %>
+                            <div class="item">
+                                <a href="/ng/<%=m.imdb%>">
+                                    <img src="<%= m.homeImage %>" loading="lazy" alt="Image">
+                                </a>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <a href="#section1" class="arrow__btn right-arrow">›</a>
+                </section>
+            </div>
+        </div>
+        <div class="second">
+            <h1>Popular</h1>
+            <div class="wrapper">
+
+                <section id="section3">
+                    <a href="#section4" class="arrow__btn left-arrow">‹</a>
+                    <% for(var m of movies) { %>
+                        <% if (m.homepage==3) { %>
+                            <div class="item">
+                                <a href="/ng/<%=m.imdb%>">
+                                    <img src="<%= m.homeImage %>" loading="lazy" alt="Image">
+                                </a>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <a href="#section4" class="arrow__btn right-arrow">›</a>
+                </section>
+
+                <section id="section4">
+                    <a href="#section3" class="arrow__btn left-arrow">‹</a>
+                    <% for(var m of movies) { %>
+                        <% if (m.homepage==4) { %>
+                            <div class="item">
+                                <a href="/ng/<%=m.imdb%>">
+                                    <img src="<%= m.homeImage %>" loading="lazy" alt="Image">
+                                </a>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <a href="#section3" class="arrow__btn right-arrow">›</a>
+                </section>
+
+            </div>
+        </div>
+</body>
+
+</html>
