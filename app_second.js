@@ -3,6 +3,7 @@ var express = require("express");
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var path = require("path");
+const cors = require("cors");
 
 const bcrypt = require("bcryptjs");
 
@@ -30,6 +31,7 @@ app.use(
   })
 );
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -252,4 +254,358 @@ app.get("/result", function (request, response) {
   );
 });
 
-app.listen(3000);
+/* POSTMAN */
+
+//<-- View Function -->
+app.get("/userslist", function (req, res) {
+  connection.query("SELECT * FROM users", function (error, results) {
+    if (error)
+      return res.send({
+        error: true,
+        message: "List of users is not found",
+      });
+    return res.send({ error: false, data: results, message: "Users list." });
+  });
+});
+app.get("/movieslist", function (req, res) {
+  connection.query("SELECT * FROM content", function (error, results) {
+    if (error)
+      return res.send({
+        error: true,
+        message: "List of movies is not found",
+      });
+    return res.send({ error: false, data: results, message: "Movies list." });
+  });
+});
+
+//<-- Search Function -->
+app.get("/userslist/:id", function (req, res) {
+  let user_id = req.params.id;
+
+  if (!user_id) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide user id." });
+  }
+
+  connection.query(
+    "SELECT * FROM users where id=?",
+    user_id,
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results[0],
+        message: "User retrieved",
+      });
+    }
+  );
+});
+app.get("/movieslist/:id", function (req, res) {
+  let movie_id = req.params.id;
+  if (!movie_id) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide movie id." });
+  }
+  connection.query(
+    "SELECT * FROM content where id=?",
+    movie_id,
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results[0],
+        message: "Movies retrieved",
+      });
+    }
+  );
+});
+
+//<-- INSERT Function -->
+/*
+{
+    "users_info" : {
+        "id": 1,
+        "name": "Siranut",
+        "email": "siranut.poko@hotmail.com",
+        "password": "12345",
+        "admin": "0"
+    }
+}
+{
+    "movies_info" : {
+        "id": 60,
+        "name": "avatar",
+        "year": 2008,
+        "homeImage": "",
+        "posterImage": "https://i.imgur.com/K8mgJYG.jpg",
+        "imdb": "tt4028464",
+        "genre": "drama crime thriller",
+        "type": "movie",
+        "homepage": null,
+        "youtube" : "hm45yGSwArY"
+    }
+}
+*/
+app.post("/userslist", async function (req, res) {
+  let users_info = req.body.users_info;
+  let hashedPassword = await bcrypt.hash(users_info.password, 8);
+  console.log(users_info);
+  if (!users_info) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide users information" });
+  }
+  if (users_info.admin === "") {
+    users_info.admin = "0";
+  }
+  console.log()
+  connection.query(
+    "SELECT * FROM users WHERE (id = ? or email = ? or name= ?)",
+    [users_info.id, users_info.email,users_info.name],
+    async (error, result) => {
+      console.log(result);
+      if (result.length > 0) {
+        console.log("Email or id is already Exist");
+        return res.send({ message: "Email or id is already Exist" });
+      } else {
+        connection.query("INSERT INTO users SET ?",
+          {
+            id: users_info.id,
+            name: users_info.name,
+            email: users_info.email,
+            password: hashedPassword,
+            img: "https://i.imgur.com/9S77aYT.jpg",
+            admin: users_info.admin,
+          },
+          function (error, results) {
+            return res.send({
+              error: false,
+              data: results.affectedRows,
+              message: "New users has been created successfully.",
+            });
+          }
+        );
+      }
+    }
+  );
+});
+app.post("/movieslist", async function (req, res) {
+  let movies_info = req.body.movies_info;
+  console.log(movies_info);
+
+  if (!movies_info) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide movie information" });
+  }
+  connection.query(
+    "INSERT INTO content SET ? ",
+    movies_info,
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results.affectedRows,
+        message: "New movies has been created successfully.",
+      });
+    }
+  );
+});
+//<-- UPDATE Function -->
+/*
+{
+    "users_info" : {
+        "id": 20,
+        "name": "PostmanEdit",
+        "email": "PostmanEdit.PostmanEdit@hotmail.com",
+        "password": "PostmanEdit",
+        "admin": "1"
+    }
+}
+{
+    "movies_info" : {
+        "id": 60,
+        "name": "Avatar Edit",
+        "year": 2020,
+        "homeImage": "",
+        "posterImage": "https://i.imgur.com/K8mgJYG.jpg",
+        "imdb": "tt4028464",
+        "genre": "drama crime thriller",
+        "type": "movie",
+        "homepage": null,
+        "youtube" : "hm45yGSwArY"
+    }
+}
+*/
+app.put("/userslist/", async function (req, res) {
+  let userID = req.body.users_info.id;
+  let users_info = req.body.users_info;
+  let userPassword = req.body.users_info.password;
+  console.log(users_info);
+
+  if (!userID || !users_info) {
+    return res
+      .status(400)
+      .send({ error: users_info, message: "Please provide user information" });
+  }
+
+  if (!userPassword) {
+    connection.query(
+      "UPDATE users SET ? WHERE id = ?",
+      [
+        {
+          id: users_info.id,
+          name: users_info.name,
+          email: users_info.email,
+          admin: users_info.admin,
+        },
+        userID,
+      ],
+      function (error, results) {
+        if (error) throw error;
+        return res.send({
+          error: false,
+          data: results.affectedRows,
+          message: "User has been updated successfully (Without Password).",
+        });
+      }
+    );
+  } else {
+    let hashedPassword = await bcrypt.hash(users_info.password, 8);
+    connection.query(
+      "UPDATE users SET ? WHERE id = ?",
+      [
+        {
+          id: users_info.id,
+          name: users_info.name,
+          email: users_info.email,
+          password: hashedPassword,
+          admin: users_info.admin,
+        },
+        userID,
+      ],
+      function (error, results) {
+        if (error) throw error;
+        return res.send({
+          error: false,
+          data: results.affectedRows,
+          message: "User has been updated successfully (With Password).",
+        });
+      }
+    );
+  }
+});
+app.put("/movieslist/", function (req, res) {
+  let movieID = req.body.movies_info.id;
+  let movies_info = req.body.movies_info;
+
+  if (!movieID || !movies_info) {
+    return res
+      .status(400)
+      .send({
+        error: movies_info,
+        message: "Please provide movie information",
+      });
+  }
+  connection.query(
+    "UPDATE content SET ? WHERE id = ?",
+    [movies_info, movieID],
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results.affectedRows,
+        message: "Movie has been updated successfully.",
+      });
+    }
+  );
+});
+//<-- DELETE Function -->
+/*
+{
+    "userID": 20
+}
+{
+    "movieID": 60
+}
+*/
+app.delete("/userslist/", function (req, res) {
+  let userID = req.body.userID;
+
+  if (!userID) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide user_ID" });
+  }
+
+  connection.query(
+    "DELETE FROM users WHERE id = ?",
+    [userID],
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results.affectedRows,
+        message: "Users has been deleted successfully.",
+      });
+    }
+  );
+});
+app.delete("/movieslist/", function (req, res) {
+  let movieID = req.body.movieID;
+
+  if (!movieID) {
+    return res
+      .status(400)
+      .send({ error: true, message: "Please provide movieID" });
+  }
+  connection.query(
+    "DELETE FROM content WHERE id = ?",
+    [movieID],
+    function (error, results) {
+      if (error) throw error;
+      return res.send({
+        error: false,
+        data: results.affectedRows,
+        message: "Content has been deleted successfully.",
+      });
+    }
+  );
+});
+//<-- ---------- -->
+
+app.use("/login_admin", async function (req, res) {
+  let email = req.body.username;
+  let password = req.body.password;
+  if (!email || !password) {
+    return res.status(400).send({
+      message: "Please provide an email and password",
+    });
+  }
+  connection.query(
+    "SELECT * FROM users WHERE name = ?",
+    [email],
+    async (error, results) => {
+      console.log(results);
+      //<-- Check if users exist and password matches -->
+      if (
+        results.length == 0 ||
+        !(await bcrypt.compare(password, results[0].password)) ||
+        results[0].admin != "1"
+      ) {
+        res.status(400).send({
+          message: "Email or Password is incorrect",
+        });
+      } else {
+        //<-- if login successful creating token -->
+        res.send({
+          token: results[0].name,
+        });
+      }
+    }
+  );
+});
+
+app.listen(4206);
