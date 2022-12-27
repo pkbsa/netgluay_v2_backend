@@ -10,10 +10,10 @@ const bcrypt = require("bcryptjs");
 const { request } = require("http");
 
 var connection = mysql.createConnection({
-  host: "202.183.167.111",
-  user: "itcs212_2_6",
-  password: "IGR94KRW",
-  database: "itcs212_2_6",
+  host: 'localhost',
+  user:  'root',
+  password: '',
+  database: 'netgluay-db'
 });
 
 connection.connect((error) => {
@@ -608,4 +608,7 @@ app.use("/login_admin", async function (req, res) {
   );
 });
 
-app.listen(4206);
+const port = process.env.PORT || 4206;
+app.listen(port, function(){
+    console.log("Listening at Port " + port);
+  });
