@@ -10,9 +10,9 @@ const bcrypt = require("bcryptjs");
 const { request } = require("http");
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user:  'root',
-  password: '',
+  host: 'netgluaydb-1.coueztt9fljt.ap-northeast-1.rds.amazonaws.com',
+  user:  'admin',
+  password: 'netgluaydb1',
   database: 'netgluay-db'
 });
 
