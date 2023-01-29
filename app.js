@@ -608,7 +608,7 @@ app.use("/login_admin", async function (req, res) {
   );
 });
 
-app.listen(4206, function(){
-  console.log("Listening at Port 4206")
+const port = process.env.PORT || 4206;
+app.listen(port, function(){
+    console.log("Listening at Port " + port);
 });
-
