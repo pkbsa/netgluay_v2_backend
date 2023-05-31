@@ -10,17 +10,10 @@ const bcrypt = require("bcryptjs");
 const { request } = require("http");
 
 var connection = mysql.createConnection({
-<<<<<<< HEAD
   host: 'db4free.net',
   user:  'netgluayadmin',
   password: 'netgluay',
   database: 'netgluaydb'
-=======
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "netgluay-db",
->>>>>>> 5852437d2b33acf580772c7cb00355861ef3868f
 });
 
 connection.connect((error) => {
@@ -45,6 +38,7 @@ app.use(bodyParser.json());
 const publicDirectory = path.join(__dirname + "/css");
 app.use(express.static(publicDirectory));
 
+app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 app.get("/", function (request, response) {
