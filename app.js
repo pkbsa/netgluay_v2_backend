@@ -10,10 +10,17 @@ const bcrypt = require("bcryptjs");
 const { request } = require("http");
 
 var connection = mysql.createConnection({
+<<<<<<< HEAD
   host: 'db4free.net',
   user:  'netgluayadmin',
   password: 'netgluay',
   database: 'netgluaydb'
+=======
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "netgluay-db",
+>>>>>>> 5852437d2b33acf580772c7cb00355861ef3868f
 });
 
 connection.connect((error) => {
@@ -611,4 +618,4 @@ app.use("/login_admin", async function (req, res) {
 const port = process.env.PORT || 3000;
 app.listen(port, function(){
     console.log("Listening at Port " + port);
-  });
+});
