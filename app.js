@@ -10,10 +10,10 @@ const bcrypt = require("bcryptjs");
 const { request } = require("http");
 
 var connection = mysql.createConnection({
-  host: 'netgluaydb-1.coueztt9fljt.ap-northeast-1.rds.amazonaws.com',
-  user:  'admin',
-  password: 'netgluaydb1',
-  database: 'netgluay-db'
+  host: 'db4free.net',
+  user:  'netgluayadmin',
+  password: 'netgluay',
+  database: 'netgluaydb'
 });
 
 connection.connect((error) => {
@@ -608,7 +608,7 @@ app.use("/login_admin", async function (req, res) {
   );
 });
 
-const port = process.env.PORT || 4206;
+const port = process.env.PORT || 3000;
 app.listen(port, function(){
     console.log("Listening at Port " + port);
   });
